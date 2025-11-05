@@ -24,9 +24,13 @@ RUN set -ex \
 WORKDIR /build/lkm
 
 # 将代码复制到容器中
+COPY go.mod go.sum ./
+
+RUN go mod download && go mod tidy -v
+
 COPY . .
 
-RUN go mod download && go mod tidy -v && go build -o lkm .
+RUN go build -o lkm .
 
 # 运行阶段指定scratch作为基础镜像
 FROM scratch
