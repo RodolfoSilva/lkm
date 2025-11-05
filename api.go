@@ -46,6 +46,7 @@ func init() {
 func filterSourceID(f func(sourceId string, w http.ResponseWriter, req *http.Request), suffix string) func(http.ResponseWriter, *http.Request) {
 	return func(w http.ResponseWriter, req *http.Request) {
 		source, err := stream.Path2SourceID(req.URL.Path, suffix)
+		log.Sugar.Infof("Getting source ID from path: %s, source: %s", req.URL.Path, source)
 		if err != nil {
 			log.Sugar.Errorf("拉流失败 解析流id发生err: %s path: %s", err.Error(), req.URL.Path)
 			httpResponse(w, http.StatusBadRequest, err.Error())
@@ -294,7 +295,7 @@ func (api *ApiServer) onHLS(source string, w http.ResponseWriter, r *http.Reques
 
 		query := r.URL.Query()
 		query.Add(hls.SessionIDKey, sid)
-		path := fmt.Sprintf("/%s.m3u8?%s", source, query.Encode())
+		path := fmt.Sprintf("/live/%s.m3u8?%s", source, query.Encode())
 
 		response := "#EXTM3U\r\n" +
 			"#EXT-X-STREAM-INF:BANDWIDTH=1,AVERAGE-BANDWIDTH=1\r\n" +
