@@ -2,12 +2,13 @@ package stream
 
 import (
 	"fmt"
-	"github.com/lkmio/avformat/utils"
-	"github.com/lkmio/lkm/log"
 	"net/http"
 	"net/url"
 	"strings"
 	"time"
+
+	"github.com/lkmio/avformat/utils"
+	"github.com/lkmio/lkm/log"
 )
 
 // SourceType 推流类型
@@ -102,7 +103,7 @@ func (s SessionState) String() string {
 }
 
 func Path2SourceID(path string, suffix string) (string, error) {
-	source := strings.TrimSpace(path)
+	source := strings.TrimSpace(strings.Replace(path, "live/", "", 1))
 	if strings.HasPrefix(source, "/") {
 		source = source[1:]
 	}
