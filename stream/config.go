@@ -199,12 +199,12 @@ func (hook *HooksConfig) IsEnableOnStarted() bool {
 func GetStreamPlayUrls(source string) []string {
 	var urls []string
 	if AppConfig.Rtmp.Enable {
-		urls = append(urls, fmt.Sprintf("rtmp://%s:%d/live/%s", AppConfig.PublicIP, AppConfig.Rtmp.Port, source))
+		urls = append(urls, fmt.Sprintf("rtmp://%s:%d/media-server/live/%s", AppConfig.PublicIP, AppConfig.Rtmp.Port, source))
 	}
 
 	if AppConfig.Rtsp.Enable {
 		// 不拼接userinfo
-		urls = append(urls, fmt.Sprintf("rtsp://%s:%d/live/%s", AppConfig.PublicIP, AppConfig.Rtsp.Port, source))
+		urls = append(urls, fmt.Sprintf("rtsp://%s:%d/media-server/live/%s", AppConfig.PublicIP, AppConfig.Rtsp.Port, source))
 	}
 
 	//if AppConfig.Http.Enable {
@@ -212,12 +212,12 @@ func GetStreamPlayUrls(source string) []string {
 	//}
 
 	if AppConfig.Hls.Enable {
-		urls = append(urls, fmt.Sprintf("http://%s:%d/live/%s.m3u8", AppConfig.PublicIP, AppConfig.Http.Port, source))
+		urls = append(urls, fmt.Sprintf("http://%s:%d/media-server/live/%s.m3u8", AppConfig.PublicIP, AppConfig.Http.Port, source))
 	}
 
-	urls = append(urls, fmt.Sprintf("http://%s:%d/live/%s.flv", AppConfig.PublicIP, AppConfig.Http.Port, source))
-	urls = append(urls, fmt.Sprintf("http://%s:%d/live/%s.rtc", AppConfig.PublicIP, AppConfig.Http.Port, source))
-	urls = append(urls, fmt.Sprintf("ws://%s:%d/live/%s.flv", AppConfig.PublicIP, AppConfig.Http.Port, source))
+	urls = append(urls, fmt.Sprintf("http://%s:%d/media-server/live/%s.flv", AppConfig.PublicIP, AppConfig.Http.Port, source))
+	urls = append(urls, fmt.Sprintf("http://%s:%d/media-server/live/%s.rtc", AppConfig.PublicIP, AppConfig.Http.Port, source))
+	urls = append(urls, fmt.Sprintf("ws://%s:%d/media-server/live/%s.flv", AppConfig.PublicIP, AppConfig.Http.Port, source))
 	return urls
 }
 

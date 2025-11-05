@@ -103,7 +103,7 @@ func (s SessionState) String() string {
 }
 
 func Path2SourceID(path string, suffix string) (string, error) {
-	source := strings.TrimSpace(strings.Replace(path, "live/", "", 1))
+	source := strings.TrimSpace(strings.Replace(path, "media-server/live/", "", 1))
 	if strings.HasPrefix(source, "/") {
 		source = source[1:]
 	}
