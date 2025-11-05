@@ -2,16 +2,17 @@ package hls
 
 import (
 	"fmt"
+	"os"
+	"path/filepath"
+	"strconv"
+	"unsafe"
+
 	"github.com/lkmio/avformat"
 	"github.com/lkmio/avformat/collections"
 	"github.com/lkmio/avformat/utils"
 	"github.com/lkmio/lkm/log"
 	"github.com/lkmio/lkm/stream"
 	"github.com/lkmio/mpeg"
-	"os"
-	"path/filepath"
-	"strconv"
-	"unsafe"
 )
 
 type TransStream struct {
@@ -163,7 +164,7 @@ func (t *TransStream) createSegment() error {
 		// ts文件
 		t.ctx.path = fmt.Sprintf("%s/%s", t.dir, tsName)
 		// m3u8列表中切片的url
-		t.ctx.url = fmt.Sprintf("%s%s", t.tsUrl, tsName)
+		t.ctx.url = fmt.Sprintf("/live/%s%s", t.tsUrl, tsName)
 
 		file, err := os.OpenFile(t.ctx.path, os.O_WRONLY|os.O_CREATE|os.O_TRUNC, 0666)
 		if err == nil {
