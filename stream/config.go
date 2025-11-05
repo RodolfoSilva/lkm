@@ -131,7 +131,7 @@ func (c HlsConfig) M3U8Path(sourceId string) string {
 // M3U8Dir 根据id返回m3u8文件位于磁盘中的绝对目录
 func (c HlsConfig) M3U8Dir(sourceId string) string {
 	split := strings.Split(sourceId, "/")
-	return AppConfig.Hls.Dir + "/" + strings.Join(split[:len(split)-1], "/")
+	return AppConfig.Hls.Dir + "/live/" + strings.Join(split[:len(split)-1], "/")
 }
 
 // M3U8Format 根据id返回m3u8文件名
