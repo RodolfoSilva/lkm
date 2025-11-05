@@ -4,13 +4,14 @@ import (
 	"encoding/binary"
 	"encoding/json"
 	"fmt"
-	"github.com/lkmio/lkm/log"
-	"go.uber.org/zap/zapcore"
 	"net"
 	"os"
 	"strconv"
 	"strings"
 	"time"
+
+	"github.com/lkmio/lkm/log"
+	"go.uber.org/zap/zapcore"
 )
 
 const (
@@ -198,12 +199,12 @@ func (hook *HooksConfig) IsEnableOnStarted() bool {
 func GetStreamPlayUrls(source string) []string {
 	var urls []string
 	if AppConfig.Rtmp.Enable {
-		urls = append(urls, fmt.Sprintf("rtmp://%s:%d/%s", AppConfig.PublicIP, AppConfig.Rtmp.Port, source))
+		urls = append(urls, fmt.Sprintf("rtmp://%s:%d/live/%s", AppConfig.PublicIP, AppConfig.Rtmp.Port, source))
 	}
 
 	if AppConfig.Rtsp.Enable {
 		// 不拼接userinfo
-		urls = append(urls, fmt.Sprintf("rtsp://%s:%d/%s", AppConfig.PublicIP, AppConfig.Rtsp.Port, source))
+		urls = append(urls, fmt.Sprintf("rtsp://%s:%d/live/%s", AppConfig.PublicIP, AppConfig.Rtsp.Port, source))
 	}
 
 	//if AppConfig.Http.Enable {
@@ -211,12 +212,12 @@ func GetStreamPlayUrls(source string) []string {
 	//}
 
 	if AppConfig.Hls.Enable {
-		urls = append(urls, fmt.Sprintf("http://%s:%d/%s.m3u8", AppConfig.PublicIP, AppConfig.Http.Port, source))
+		urls = append(urls, fmt.Sprintf("http://%s:%d/live/%s.m3u8", AppConfig.PublicIP, AppConfig.Http.Port, source))
 	}
 
-	urls = append(urls, fmt.Sprintf("http://%s:%d/%s.flv", AppConfig.PublicIP, AppConfig.Http.Port, source))
-	urls = append(urls, fmt.Sprintf("http://%s:%d/%s.rtc", AppConfig.PublicIP, AppConfig.Http.Port, source))
-	urls = append(urls, fmt.Sprintf("ws://%s:%d/%s.flv", AppConfig.PublicIP, AppConfig.Http.Port, source))
+	urls = append(urls, fmt.Sprintf("http://%s:%d/live/%s.flv", AppConfig.PublicIP, AppConfig.Http.Port, source))
+	urls = append(urls, fmt.Sprintf("http://%s:%d/live/%s.rtc", AppConfig.PublicIP, AppConfig.Http.Port, source))
+	urls = append(urls, fmt.Sprintf("ws://%s:%d/live/%s.flv", AppConfig.PublicIP, AppConfig.Http.Port, source))
 	return urls
 }
 

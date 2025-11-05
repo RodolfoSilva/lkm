@@ -35,16 +35,16 @@ sudo docker run --log-driver json-file --log-opt max-size=10m --network=host -it
 
 ffmpeg推流示例：
 
-    ffmpeg -re -i ./232937384-1-208_baseline.mp4 -c copy -f flv rtmp://127.0.0.1/hls/mystream
+    ffmpeg -re -i ./232937384-1-208_baseline.mp4 -c copy -f flv rtmp://127.0.0.1/live/hls/mystream
 
 拉流地址示例：
 
     [
-    	"rtmp://192.168.2.148:1935/hls/mystream",
-    	"rtsp://192.168.2.148:554/hls/mystream",
-    	"http://192.168.2.148:8080/hls/mystream.flv",
-    	"http://192.168.2.148:8080/hls/mystream.rtc",
-    	"ws://192.168.2.148:8080/hls/mystream.flv"
+    	"rtmp://192.168.2.148:1935/live/hls/mystream",
+    	"rtsp://192.168.2.148:554/live/hls/mystream",
+    	"http://192.168.2.148:8080/live/hls/mystream.flv",
+    	"http://192.168.2.148:8080/live/hls/mystream.rtc",
+    	"ws://192.168.2.148:8080/live/hls/mystream.flv"
     ]
 
 ## GB28181推流
@@ -57,14 +57,14 @@ ffmpeg推流示例：
 
 ```
 // 实时预览-UDP方式 34020000001320000001设备下的34020000001310000001通道
-ffplay -i rtmp://127.0.0.1/34020000001320000001/34020000001310000001
+ffplay -i rtmp://127.0.0.1/live/34020000001320000001/34020000001310000001
 // 实时预览-TCP被动方式 34020000001320000001设备下的34020000001310000001通道
-ffplay -i rtmp://127.0.0.1/34020000001320000001/34020000001310000001?setup=passive
-ffplay -i http://127.0.0.1:8080/34020000001320000001/34020000001310000001.flv?setup=passive
-ffplay -i http://127.0.0.1:8080/34020000001320000001/34020000001310000001.m3u8?setup=passive
-ffplay -i rtsp://test:123456@127.0.0.1/34020000001320000001/34020000001310000001?setup=passive
+ffplay -i rtmp://127.0.0.1/live/34020000001320000001/34020000001310000001?setup=passive
+ffplay -i http://127.0.0.1:8080/live/34020000001320000001/34020000001310000001.flv?setup=passive
+ffplay -i http://127.0.0.1:8080/live/34020000001320000001/34020000001310000001.m3u8?setup=passive
+ffplay -i rtsp://test:123456@127.0.0.1/live/34020000001320000001/34020000001310000001?setup=passive
 // 回放-TCP被动方式 34020000001320000001设备下的34020000001310000001通道
-ffplay -i rtmp://127.0.0.1/34020000001320000001/34020000001310000001.session_id_0?setup=passive&stream_type=playback&start_time=2024-06-18T15:20:56&end_time=2024-06-18T15:25:56
+ffplay -i rtmp://127.0.0.1/live/34020000001320000001/34020000001310000001.session_id_0?setup=passive&stream_type=playback&start_time=2024-06-18T15:20:56&end_time=2024-06-18T15:25:56
 
 ```
 
