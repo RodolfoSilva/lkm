@@ -4,10 +4,11 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
-	"github.com/lkmio/lkm/log"
 	"io"
 	"net/http"
 	"time"
+
+	"github.com/lkmio/lkm/log"
 )
 
 // 每个通知事件都需要携带的字段
@@ -31,7 +32,7 @@ func SendHookEvent(url string, body []byte) (*http.Response, error) {
 	client := &http.Client{
 		Timeout: time.Duration(AppConfig.Hooks.Timeout),
 	}
-	request, err := http.NewRequest("post", url, bytes.NewBuffer(body))
+	request, err := http.NewRequest("POST", url, bytes.NewBuffer(body))
 	if err != nil {
 		return nil, err
 	}
