@@ -65,7 +65,7 @@ func Hook(event HookEvent, params string, body interface{}) (*http.Response, err
 		log.Sugar.Infof("received response for hook %s event: status='%s', response body='%s'", event.ToString(), response.Status, responseBodyToString(response))
 	}
 
-	if http.StatusOK != response.StatusCode {
+	if http.StatusOK != response.StatusCode && http.StatusNoContent != response.StatusCode {
 		return response, fmt.Errorf("unexpected response status: %s", response.Status)
 	}
 
