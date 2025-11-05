@@ -4,6 +4,15 @@ import (
 	"encoding/base64"
 	"encoding/json"
 	"fmt"
+	"io"
+	"net"
+	"net/http"
+	"os"
+	"runtime"
+	"strconv"
+	"strings"
+	"time"
+
 	"github.com/gorilla/mux"
 	"github.com/gorilla/websocket"
 	"github.com/lkmio/avformat/utils"
@@ -13,14 +22,6 @@ import (
 	"github.com/lkmio/lkm/log"
 	"github.com/lkmio/lkm/rtc"
 	"github.com/lkmio/lkm/stream"
-	"io"
-	"net"
-	"net/http"
-	"os"
-	"runtime"
-	"strconv"
-	"strings"
-	"time"
 )
 
 type ApiServer struct {
@@ -76,11 +77,11 @@ func withJsonParams[T any](f func(params T, w http.ResponseWriter, req *http.Req
 
 func startApiServer(addr string) {
 	/**
-	  http://host:port/xxx.flv
-	  http://host:port/xxx.rtc
-	  http://host:port/xxx.m3u8
-	  http://host:port/xxx_0.ts
-	  ws://host:port/xxx.flv
+	  http://host:port/live/xxx.flv
+	  http://host:port/live/xxx.rtc
+	  http://host:port/live/xxx.m3u8
+	  http://host:port/live/xxx_0.ts
+	  ws://host:port/live/xxx.flv
 	*/
 
 	apiServer.router.Use(func(handler http.Handler) http.Handler {
@@ -104,20 +105,20 @@ func startApiServer(addr string) {
 	// 放在最前面, 避免被后面的路由拦截
 	apiServer.router.PathPrefix("/record/").Handler(http.StripPrefix("/record/", http.FileServer(http.Dir(stream.AppConfig.Record.Dir))))
 
-	// {source}.flv和/{source}/{stream}.flv意味着, 推流id(路径)只能嵌套一层
-	apiServer.router.HandleFunc("/{source}.flv", filterSourceID(apiServer.onFlv, ".flv"))
-	apiServer.router.HandleFunc("/{source}/{stream}.flv", filterSourceID(apiServer.onFlv, ".flv"))
+	// /live/{source}.flv和/live/{source}/{stream}.flv意味着, 推流id(路径)只能嵌套一层
+	apiServer.router.HandleFunc("/live/{source}.flv", filterSourceID(apiServer.onFlv, ".flv"))
+	apiServer.router.HandleFunc("/live/{source}/{stream}.flv", filterSourceID(apiServer.onFlv, ".flv"))
 
 	if stream.AppConfig.Hls.Enable {
-		apiServer.router.HandleFunc("/{source}.m3u8", filterSourceID(apiServer.onHLS, ".m3u8"))
-		apiServer.router.HandleFunc("/{source}/{stream}.m3u8", filterSourceID(apiServer.onHLS, ".m3u8"))
-		apiServer.router.HandleFunc("/{source}.ts", filterSourceID(apiServer.onTS, ".ts"))
-		apiServer.router.HandleFunc("/{source}/{stream}.ts", filterSourceID(apiServer.onTS, ".ts"))
+		apiServer.router.HandleFunc("/live/{source}.m3u8", filterSourceID(apiServer.onHLS, ".m3u8"))
+		apiServer.router.HandleFunc("/live/{source}/{stream}.m3u8", filterSourceID(apiServer.onHLS, ".m3u8"))
+		apiServer.router.HandleFunc("/live/{source}.ts", filterSourceID(apiServer.onTS, ".ts"))
+		apiServer.router.HandleFunc("/live/{source}/{stream}.ts", filterSourceID(apiServer.onTS, ".ts"))
 	}
 
 	if stream.AppConfig.WebRtc.Enable {
-		apiServer.router.HandleFunc("/{source}.rtc", filterSourceID(apiServer.onRtc, ".rtc"))
-		apiServer.router.HandleFunc("/{source}/{stream}.rtc", filterSourceID(apiServer.onRtc, ".rtc"))
+		apiServer.router.HandleFunc("/live/{source}.rtc", filterSourceID(apiServer.onRtc, ".rtc"))
+		apiServer.router.HandleFunc("/live/{source}/{stream}.rtc", filterSourceID(apiServer.onRtc, ".rtc"))
 	}
 
 	apiServer.router.HandleFunc("/api/v1/source/list", apiServer.OnSourceList)                           // 查询所有推流源
